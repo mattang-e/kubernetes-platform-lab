@@ -19,9 +19,9 @@ Verification
 
 ---
 
-# 1. Kubernetes 1.35 and cgroup v1 Compatibility
+## 1. Kubernetes 1.35 and cgroup v1 Compatibility
 
-## Symptom
+### Symptom
 
 Rocky Linux 8.10 환경에서 Kubernetes 1.35 Cluster를 구성하려 했으나
 `kubeadm init` 과정에서 cgroup 관련 문제가 발생하였다.
@@ -46,7 +46,7 @@ tmpfs
 uname -r
 ```
 
-## Investigation
+### Investigation
 
 Kubernetes 1.35 환경과 현재 Rocky Linux 8.10의
 cgroup 및 Kernel 구성을 함께 검토하였다.
@@ -66,7 +66,7 @@ systemd.unified_cgroup_hierarchy=1
 cat /proc/cmdline
 ```
 
-## Root Cause
+### Root Cause
 
 현재 Lab의 Rocky Linux 8.10 환경은 cgroup v1을 사용하고 있었으며,
 Kubernetes 1.35를 그대로 적용하기에는 OS 및 cgroup 환경을
@@ -75,7 +75,7 @@ Kubernetes 1.35를 그대로 적용하기에는 OS 및 cgroup 환경을
 단순히 Kubernetes 설치를 강행하기보다
 현재 OS 환경에서 안정적으로 Cluster를 구축하는 방향을 선택하였다.
 
-## Resolution
+### Resolution
 
 Kubernetes Repository를 v1.35에서 v1.34로 변경하였다.
 
@@ -101,7 +101,7 @@ kubeadm reset -f
 
 이후 Kubernetes 1.34 환경에서 Cluster를 다시 구성하였다.
 
-## Verification
+### Verification
 
 ```bash
 kubectl get nodes
@@ -118,9 +118,9 @@ OS, Kernel, cgroup Version 및 Container Runtime의 호환성을
 
 ---
 
-# 2. Keepalived VIP Conflict
+## 2. Keepalived VIP Conflict
 
-## Symptom
+### Symptom
 
 HAProxy와 Keepalived를 이용하여 Kubernetes API용
 Virtual IP를 구성하는 과정에서 VIP가 정상적으로 하나의
@@ -140,7 +140,7 @@ VIP를 소유해야 한다.
 
 그러나 Keepalived 간 상태 동기화가 정상적으로 이루어지지 않았다.
 
-## Investigation
+### Investigation
 
 lb01과 lb02의 Keepalived 상태 및 Network 설정을 점검하였다.
 
@@ -159,7 +159,7 @@ Keepalived Service 자체는 동작하고 있었기 때문에
 
 Host Firewall인 `firewalld`가 활성화되어 있는 것도 확인하였다.
 
-## Root Cause
+### Root Cause
 
 `firewalld`에 의해 Keepalived가 사용하는
 VRRP 통신이 차단되고 있었다.
@@ -169,7 +169,7 @@ VRRP는 TCP/UDP Port가 아니라 IP Protocol 112를 사용한다.
 두 Load Balancer가 서로의 VRRP Advertisement를 정상적으로
 수신하지 못하면서 VIP 상태가 정상적으로 결정되지 않았다.
 
-## Resolution
+### Resolution
 
 VRRP 통신이 가능하도록 Firewall 정책을 수정하였다.
 
@@ -210,9 +210,9 @@ VRRP와 같은 Network Protocol이 Host Firewall을 통과할 수 있는지
 
 ---
 
-# 3. Calico Network Failure with firewalld
+## 3. Calico Network Failure with firewalld
 
-## Symptom
+### Symptom
 
 Calico 설치 후 일부 Node에서 `calico-node`가
 정상적인 Ready 상태가 되지 않았다.
@@ -235,7 +235,7 @@ Cannot evict pod ...
 would violate pod's disruption budget
 ```
 
-## Investigation
+### Investigation
 
 Calico Pod 상태를 확인하였다.
 
@@ -263,7 +263,7 @@ Calico Log에서도 Network Component가 정상적으로 준비되지 않는
 Kubernetes Node의 Host Firewall이 활성화되어 있었기 때문에
 Firewall 정책이 Calico Node 간 통신에 영향을 주는지 확인하였다.
 
-## Root Cause
+### Root Cause
 
 Lab 환경에서 `firewalld`를 중지한 후 Calico가 정상화되었기 때문에
 Host Firewall 정책이 Calico Network 통신에 영향을 주고 있음을 확인하였다.
@@ -272,7 +272,7 @@ Host Firewall 정책이 Calico Network 통신에 영향을 주고 있음을 확�
 직접적인 원인이었는지는 특정하지 않았기 때문에,
 특정 Port를 원인으로 단정하지 않았다.
 
-## Resolution
+### Resolution
 
 문제 범위를 확인하기 위해 Ansible을 사용하여
 Kubernetes Node의 `firewalld`를 일시적으로 중지하였다.
@@ -284,7 +284,7 @@ ansible k8s -i inventory.ini -m service \
 
 이후 Calico Component가 정상 상태로 복구되었다.
 
-## Verification
+### Verification
 
 ```bash
 kubectl get pods -n calico-system -o wide
@@ -320,9 +320,9 @@ Node Taint, Startup Probe, CNI Log 및 Host Firewall까지
 
 ---
 
-# 4. Control Plane Node Name Correction
+## 4. Control Plane Node Name Correction
 
-## Symptom
+### Symptom
 
 첫 번째 Control Plane을 `kubeadm init`으로 구성한 후
 OS Hostname은 `cp01`이지만 Kubernetes에서는 Node 이름이
@@ -342,7 +342,7 @@ worker02
 worker03
 ```
 
-## Investigation
+### Investigation
 
 초기 Cluster 구성에 사용한 `kubeadm-config.yaml`을 확인하였다.
 
@@ -356,7 +356,7 @@ nodeRegistration:
 `kubeadm config print init-defaults`를 기반으로 설정 파일을 작성하면서
 기본값인 `node`가 그대로 남아 있었다.
 
-## Root Cause
+### Root Cause
 
 OS Hostname 문제는 아니었다.
 
@@ -370,7 +370,7 @@ nodeRegistration:
 첫 번째 Control Plane이 Kubernetes에 `node`라는 이름으로
 등록된 것이 원인이었다.
 
-## Resolution
+### Resolution
 
 이미 3개의 Control Plane이 구성된 상태였기 때문에
 Cluster 전체를 다시 구축하지 않고 해당 Control Plane만
@@ -417,7 +417,7 @@ kubeadm join 192.168.10.115:6443 \
   --certificate-key <CERTIFICATE_KEY>
 ```
 
-## Verification
+### Verification
 
 Node 이름 확인:
 
@@ -464,7 +464,7 @@ Cluster 전체를 재구축하지 않고 Node를 교체할 수 있다.
 
 ---
 
-# Summary
+## Summary
 
 이번 Cluster 구축 과정에서 다음 문제를 직접 분석하고 해결하였다.
 
