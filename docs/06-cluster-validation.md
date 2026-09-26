@@ -157,25 +157,6 @@ Worker Node에서 실행되는 것을 확인하였다.
 
 이 테스트를 통해 다음 기능을 확인하였다.
 
-```text
-API Server
-    │
-    ▼
-Scheduler
-    │
-    ▼
-Worker Node
-    │
-    ▼
-kubelet
-    │
-    ▼
-containerd
-    │
-    ▼
-nginx Container
-```
-
 ---
 
 ## 5. ClusterIP Service
@@ -228,17 +209,6 @@ kubectl run curl-test \
   -- curl http://nginx-test-svc
 ```
 ```text
-<!DOCTYPE html>
-<html>
-<head>
-<title>Welcome to nginx!</title>
-<style>
-html { color-scheme: light dark; }
-body { width: 35em; margin: 0 auto;
-font-family: Tahoma, Verdana, Arial, sans-serif; }
-</style>
-</head>
-<body>
 <h1>Welcome to nginx!</h1>
 ```
 nginx Welcome Page가 정상적으로 반환되는 것을 확인하였다.
@@ -288,46 +258,20 @@ Kubernetes control plane is running at https://192.168.10.115:6443
 Client는 개별 Control Plane Node가 아닌
 HAProxy / Keepalived로 구성된 VIP를 통해 API Server에 접근한다.
 
-```text
-kubectl
-   │
-   ▼
-192.168.10.115:6443
-   │
-   ▼
-HAProxy
-   │
-   ├── cp01
-   ├── cp02
-   └── cp03
-```
-
 ---
 
 ## 8. Calico Status
-
-Calico Component 상태를 확인하였다.
+Calico Node 상태를 확인하였다.
 
 ```bash
-kubectl get pods -n calico-system -o wide
+kubectl get pods -n calico-system \
+  -l k8s-app=calico-node
 ```
 
-각 Node의 `calico-node`가 정상적으로 실행되고 있는지 확인하였다.
+모든 Kubernetes Node의 `calico-node`가 `1/1 Running` 상태인 것을 확인하였다.
 
-```text
-NAME                                       READY   STATUS    RESTARTS       AGE   IP               NODE       NOMINATED NODE   READINESS GATES
-calico-apiserver-68bfb5db7c-m2pzx          1/1     Running   0              13h   10.244.19.67     worker03   <none>           <none>
-calico-apiserver-68bfb5db7c-t8d8v          1/1     Running   0              13h   10.244.30.67     worker02   <none>           <none>
-calico-kube-controllers-6479f5cb88-kdtr7   1/1     Running   0              13h   10.244.30.68     worker02   <none>           <none>
-calico-node-77tk4                          1/1     Running   15 (13h ago)   14h   192.168.10.111   worker01   <none>           <none>
-calico-node-8n57f                          1/1     Running   7 (13h ago)    14h   192.168.10.102   cp02       <none>           <none>
-calico-node-mhvn4                          1/1     Running   15 (13h ago)   14h   192.168.10.113   worker03   <none>           <none>
-calico-node-pg57s                          1/1     Running   6 (13h ago)    13h   192.168.10.103   cp03       <none>           <none>
-calico-node-sdg25                          1/1     Running   0              13h   192.168.10.101   cp01       <none>           <none>
-calico-node-wlm9s                          1/1     Running   15 (13h ago)   14h   192.168.10.112   worker02   <none>           <none>
-```
-
-이를 통해 Node 간 Pod Network가 정상적으로 구성되어 있음을 확인하였다.
+상세한 Calico 구성 및 검증은
+[Calico Network](05-calico-network.md)를 참고한다.
 
 ---
 
