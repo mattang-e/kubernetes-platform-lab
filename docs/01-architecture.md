@@ -49,15 +49,15 @@ Kubernetes Control Plane의 고가용성 구조를 학습하기 위해
 | Worker | worker03 | 192.168.10.113 |
 
 API Virtual IP
-```shell
+```text
     192.168.10.115
 ```
 Pod CIDR
-```shell
+```text
     10.244.0.0/16
 ```
 Service CIDR
-```shell
+```text
     10.96.0.0/12
 ```
 
@@ -97,7 +97,7 @@ quorum을 유지할 수 있도록 구성하였다.
 ## Network
 
 Pod Network는 Calico를 사용하였다.
-```shell
+```text
     Pod CIDR : 10.244.0.0/16
 ```
 각 Node의 Pod 간 통신 및 Kubernetes NetworkPolicy를
