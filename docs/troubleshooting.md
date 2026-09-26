@@ -68,12 +68,12 @@ cat /proc/cmdline
 
 ### Root Cause
 
-현재 Lab의 Rocky Linux 8.10 환경은 cgroup v1을 사용하고 있었으며,
-Kubernetes 1.35를 그대로 적용하기에는 OS 및 cgroup 환경을
-추가로 변경해야 하는 상황이었다.
+현재 Lab은 Rocky Linux 8.10, Kernel 4.18 및 cgroup v1 환경으로
+구성되어 있었다.
 
-단순히 Kubernetes 설치를 강행하기보다
-현재 OS 환경에서 안정적으로 Cluster를 구축하는 방향을 선택하였다.
+Kubernetes 1.35 적용 과정에서 현재 OS 및 cgroup 환경과의
+호환성 제약을 확인하였으며, cgroup v2 전환도 시도했지만
+현재 Lab 환경에서는 설정이 정상적으로 적용되지 않았다.
 
 ### Resolution
 
@@ -171,9 +171,7 @@ VRRP는 TCP/UDP Port가 아니라 IP Protocol 112를 사용한다.
 
 ### Resolution
 
-VRRP 통신이 가능하도록 Firewall 정책을 수정하였다.
-
-문제 확인 과정에서는 `firewalld`를 일시적으로 중지하여
+문제 원인을 확인하기 위해 `firewalld`를 일시적으로 중지하여
 VRRP 통신 여부를 검증하였다.
 
 ```bash
@@ -182,7 +180,7 @@ systemctl stop firewalld
 
 이후 Keepalived가 정상적으로 MASTER/BACKUP 상태를 구성하였다.
 
-## Verification
+### Verification
 
 VIP 확인:
 
@@ -396,8 +394,9 @@ kubeadm reset -f
 kubectl delete node node
 ```
 
-기존 etcd member가 제거된 것을 확인한 후
-새로운 Certificate Key와 Join Token을 생성하였다.
+기존 cp01의 etcd Member가 제거되고
+cp02와 cp03의 etcd Member가 정상적으로 유지되는 것을 확인하였다.
+이후 새로운 Certificate Key와 Join Token을 생성하였다.
 
 ```bash
 kubeadm init phase upload-certs --upload-certs
@@ -470,8 +469,8 @@ Cluster 전체를 재구축하지 않고 Node를 교체할 수 있다.
 
 | Issue | Cause | Resolution |
 |---|---|---|
-| Kubernetes 1.35 초기화 문제 | Rocky 8 / cgroup v1 환경 | Kubernetes 1.34 사용 |
-| Keepalived VIP 문제 | Firewall의 VRRP 통신 차단 | VRRP 통신 허용 |
+| Kubernetes 1.35 적용 문제 | Rocky 8.10 / Kernel 4.18 / cgroup v1 환경과의 호환성 제약 | Lab 환경을 유지하고 Kubernetes 1.34로 구성 |
+| Keepalived VIP 문제 | Firewall의 VRRP 통신 차단 | Firewall 격리 테스트 후 VIP 정상화 |
 | Calico Network 장애 | Host Firewall 영향 | Firewall 격리 테스트 및 Network 복구 |
 | cp01 Node 이름 오류 | `nodeRegistration.name` 설정 | Control Plane 제거 후 재가입 |
 
