@@ -390,7 +390,18 @@ worker03
 
 ## Next Step
 
-Kubernetes Cluster Bootstrap 이후 HAProxy와 Keepalived를 이용하여
-Kubernetes API Server의 고가용성 Endpoint를 구성하였다.
+본 Cluster에서는 Kubernetes API Server의 단일 진입점을 제공하기 위해
+
+HAProxy와 Keepalived를 사용하였다.
+
+`kubeadm init`에서 사용한 다음 Endpoint가 어떻게 구성되어 있는지
+
+별도 문서에서 설명한다.
+
+```yaml
+
+controlPlaneEndpoint: "192.168.10.115:6443"
+
+```
 
 → [Control Plane HA](04-control-plane-ha.md)
