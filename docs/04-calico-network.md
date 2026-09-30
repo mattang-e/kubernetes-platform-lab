@@ -316,4 +316,4 @@ CoreDNS           정상
 Kubernetes Control Plane HA와 Calico Pod Network 구성이 완료된 후
 실제 Deployment와 Service를 생성하여 Cluster 동작을 검증하였다.
 
-→ [Cluster Validation](06-cluster-validation.md)
+→ [← 03. Control Plane HA](03-control-plane-ha.md) | [05. Cluster Validation →](05-cluster-validation.md)

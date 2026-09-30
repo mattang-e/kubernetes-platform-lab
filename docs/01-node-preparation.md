@@ -443,4 +443,4 @@ Node 기본 구성이 완료된 후 다음 단계에서 kubeadm을 이용하여
 첫 번째 Control Plane을 초기화하고 추가 Control Plane 및 Worker Node를
 Cluster에 Join하였다.
 
-→ [Kubernetes Cluster Bootstrap](03-kubeadm-cluster.md)
+→ [02. Kubernetes Cluster Bootstrap →](02-kubeadm-cluster.md)

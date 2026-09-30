@@ -321,4 +321,4 @@ kubectl get service nginx-test-svc
 Cluster 구축 및 기본 기능 검증 과정에서 발생한 문제와
 원인 분석 및 해결 과정을 별도의 Troubleshooting 문서에 정리하였다.
 
-→ [Troubleshooting](troubleshooting.md)
+→ [← 04. Calico Network](04-calico-network.md) | [Troubleshooting →](troubleshooting.md)

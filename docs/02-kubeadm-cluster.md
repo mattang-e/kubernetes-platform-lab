@@ -247,7 +247,7 @@ Calico가 정상적으로 구성되면 Node가 `Ready` 상태로 변경된다.
 
 Calico의 상세 구성 및 Network Troubleshooting은 별도 문서에서 다룬다.
 
-→ [Calico Network](05-calico-network.md)
+→ [Calico Network](04-calico-network.md)
 
 ---
 
@@ -404,4 +404,4 @@ controlPlaneEndpoint: "192.168.10.115:6443"
 
 ```
 
-→ [Control Plane HA](04-control-plane-ha.md)
+→ [← 01. Node Preparation](01-node-preparation.md) | [03. Control Plane HA →](03-control-plane-ha.md)

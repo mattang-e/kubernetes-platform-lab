@@ -477,3 +477,5 @@ Cluster 전체를 재구축하지 않고 Node를 교체할 수 있다.
 이 과정을 통해 Kubernetes Cluster 운영 시
 단순 Resource 상태뿐 아니라 OS, Network, Firewall, etcd,
 CNI 및 Control Plane 구성까지 함께 분석해야 한다는 점을 확인하였다.
+
+[← 05. Cluster Validation](05-cluster-validation.md) | [Back to README](../README.md)

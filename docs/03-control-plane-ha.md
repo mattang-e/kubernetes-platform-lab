@@ -391,4 +391,4 @@ Host Level의 단일 장애 지점도 제거해야 한다.
 Control Plane HA 구성과 Kubernetes Cluster Bootstrap 이후
 Calico를 이용하여 Pod Network를 구성하였다.
 
-→ [Calico Network](05-calico-network.md)
+→ [← 02. Kubernetes Cluster Bootstrap](02-kubeadm-cluster.md) | [04. Calico Network →](04-calico-network.md)
