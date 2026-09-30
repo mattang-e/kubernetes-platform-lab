@@ -8,8 +8,8 @@ Kubernetes 클러스터를 구축하기 전 Control Plane 및 Worker Node의
 모든 Kubernetes Node는 Rocky Linux 8.10을 사용하며,
 Container Runtime은 containerd를 사용하였다.
 
-노드 간 설정 차이를 최소화하기 위해 공통 OS 설정 및 Kubernetes 패키지 설치는
-Ansible을 활용하여 구성하였다.
+노드 간 설정 차이를 최소화하기 위해 공통 OS 설정 및
+Kubernetes Node 사전 작업에 Ansible을 활용하였다.
 
 ---
 

@@ -271,7 +271,7 @@ kubectl get pods -n calico-system \
 모든 Kubernetes Node의 `calico-node`가 `1/1 Running` 상태인 것을 확인하였다.
 
 상세한 Calico 구성 및 검증은
-[Calico Network](05-calico-network.md)를 참고한다.
+[Calico Network](04-calico-network.md)를 참고한다.
 
 ---
 
